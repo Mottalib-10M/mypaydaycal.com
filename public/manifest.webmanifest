@@ -1,6 +1,6 @@
 {
- "name": "US Payroll Calendar",
- "short_name": "Payroll Calendar",
+ "name": "My Payday Cal",
+ "short_name": "Payday Cal",
  "description": "Build your 2026 and 2027 payroll calendar: weekly, biweekly, semi-monthly or monthly paydays, moved for weekends and Federal Reserve holidays, with 27-pay-period years explained.",
  "start_url": "/en/",
  "display": "standalone",

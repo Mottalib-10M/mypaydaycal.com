@@ -118,9 +118,9 @@ export function federalBiweekly(annual: number) {
 export function toIcs(days: Payday[], name: string, stamp: string): string {
   const esc = (t: string) => t.replace(/[\\;,]/g, (c) => `\\${c}`);
   const d8 = (d: ISO) => d.replace(/-/g, '');
-  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Radif Partners//US Payroll Calendar//EN', 'CALSCALE:GREGORIAN', `X-WR-CALNAME:${esc(name)}`];
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Radif Partners//My Payday Cal//EN', 'CALSCALE:GREGORIAN', `X-WR-CALNAME:${esc(name)}`];
   for (const p of days) {
-    lines.push('BEGIN:VEVENT', `UID:${d8(p.paid)}-${d8(p.nominal)}@us-payroll-calendar`, `DTSTAMP:${stamp}`, `DTSTART;VALUE=DATE:${d8(p.paid)}`, `DTEND;VALUE=DATE:${d8(addDays(p.paid, 1))}`, `SUMMARY:${esc('Payday')}`);
+    lines.push('BEGIN:VEVENT', `UID:${d8(p.paid)}-${d8(p.nominal)}@mypaydaycal.com`, `DTSTAMP:${stamp}`, `DTSTART;VALUE=DATE:${d8(p.paid)}`, `DTEND;VALUE=DATE:${d8(addDays(p.paid, 1))}`, `SUMMARY:${esc('Payday')}`);
     const desc = [p.reason ? `Moved from ${p.nominal} (${p.reason})` : '', p.periodStart ? `Pay period ${p.periodStart} to ${p.periodEnd}` : ''].filter(Boolean).join('. ');
     if (desc) lines.push(`DESCRIPTION:${esc(desc)}`);
     lines.push('TRANSP:TRANSPARENT', 'END:VEVENT');

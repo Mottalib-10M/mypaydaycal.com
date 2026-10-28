@@ -8,7 +8,7 @@ import { PAGES } from '../../lib/guides';
 const lang = 'en';
 const n = PAGES.length + 1;
 ---
-<PageLayout title="Radif Partners, publisher of US Payroll Calendar: who we are" description="Who publishes US Payroll Calendar, which laws and official tables its paydays and holidays come from, what the tools do with inputs and what it never sells." lang={lang} jsonLd={[organizationSchema(lang), profilePageSchema({ path: route('about', lang), lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'About', path: route('about', lang) }])]} breadcrumbs={[{ label: 'About' }]}>
+<PageLayout title="Radif Partners, publisher of My Payday Cal: who we are" description="Who publishes My Payday Cal, which laws and official tables its paydays and holidays come from, what the tools do with inputs and what it never sells." lang={lang} jsonLd={[organizationSchema(lang), profilePageSchema({ path: route('about', lang), lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'About', path: route('about', lang) }])]} breadcrumbs={[{ label: 'About' }]}>
   <header class="mb-6"><p class="kicker">About</p><h1 class="mt-0 text-3xl font-bold text-navy-900 md:text-4xl">Who is behind {SITE_NAMES[lang]}</h1></header>
   <div class="prose prose-slate max-w-none">
     <div class="not-prose mb-6"><p class="text-lg font-semibold text-navy-900">{AUTHOR_NAME}</p><p class="text-navy-700">{AUTHOR_ROLE[lang]}</p></div>

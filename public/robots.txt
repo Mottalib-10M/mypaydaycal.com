@@ -3,4 +3,4 @@ Allow: /
 
 Disallow: /*?*
 
-Sitemap: https://us-payroll-calendar.example/sitemap-index.xml
+Sitemap: https://mypaydaycal.com/sitemap-index.xml

@@ -1,6 +1,6 @@
 /** Configuration centrale du site (générée par new-site.py). */
-export const SITE_URL = "https://us-payroll-calendar.example";
-export const SITE_NAMES: Record<string, string> = {"en": "US Payroll Calendar"};
+export const SITE_URL = "https://mypaydaycal.com";
+export const SITE_NAMES: Record<string, string> = {"en": "My Payday Cal"};
 // Partie du nom affichée en couleur dans l'en-tête (RECETTE §10.3), « » pour aucune.
 export const BRAND_ACCENT = "Payroll";
 export const LANG_TAGS: Record<string, string> = {"en": "en-US"};
@@ -18,7 +18,7 @@ export const AUTHOR_DESC: Record<string, string> = {"en": "Radif Partners reads 
  *  themes reellement traites par le site, pas une liste de mots-cles : un sujet
  *  declare ici sans page qui le couvre est une declaration fausse. */
 export const KNOWS_ABOUT: Record<string, string[]> = {"en": ["Biweekly, semi-monthly, weekly and monthly pay schedules", "Years with 27 biweekly pay periods", "Federal holidays under 5 U.S.C. 6103 and Federal Reserve bank holidays", "Direct deposit timing around FedACH holiday closures", "Federal pay periods and OPM leave years", "Daylight saving time under 15 U.S.C. 260a and hours worked on overnight shifts"]};
-export const CONTACT_EMAIL = "contact@us-payroll-calendar.example";
+export const CONTACT_EMAIL = "contact@mypaydaycal.com";
 export const THEME_COLOR = '#8E1B30';
 export const LOGO_SYMBOL = 'PD';
 export const BING_VERIFY_CODE = '';
