@@ -1,0 +1,121 @@
+---
+/**
+ * Home (pillar page): the payroll calendar generator for 2027 first, then the four frequencies, the
+ * holiday rule, 26 or 27 paydays, federal pay periods, bank days and clock changes, each with a tool,
+ * then the map of the site, the data section and the sources. Every date comes from the engines.
+ */
+import PageLayout from '../layouts/PageLayout.astro';
+import Tool from './Tool.astro';
+import Clamp from './Clamp.astro';
+import Sources from './Sources.astro';
+import { route } from '../i18n/routes';
+import { PAGES } from '../lib/guides';
+import { GROUPS_ORDER, groupLabel } from '../i18n/nav';
+import { helpers } from '../lib/helpers';
+import { LAST_UPDATED, AUTHOR_NAME } from '../data/site-config';
+import { displayDate } from '../lib/format';
+import { faqSchema, webApplicationSchema, websiteSchema, organizationSchema } from '../lib/seo';
+const lang = 'en';
+const h = helpers(lang, true);
+const link = (id: string, text: string) => h.a(id, text);
+const cards = (g: (typeof GROUPS_ORDER)[number]) => PAGES.filter((p) => p.group === g).map((p) => ({ href: route(p.id, lang), name: p.en.nav, text: p.en.card }));
+const [s1, s2] = h.pay.biweeklySeries(2027, 5);
+const A = h.sched({ anchor: s1.first }), B = h.sched({ anchor: s2.first });
+const SEMI = h.sched({ freq: 'semimonthly' }), MON = h.sched({ freq: 'monthly' }), WK = h.sched({ freq: 'weekly', anchor: '2027-01-01' });
+const count = (s: typeof A, y: number) => h.pay.paydays(s, y).length;
+const fedDays = (y: number) => h.cal.workingDaysByMonth(y, 'fed').reduce((s, m) => s + m.working, 0);
+const federalDays = (y: number) => h.cal.workingDaysByMonth(y, 'federal').reduce((s, m) => s + m.working, 0);
+
+const title = 'Payroll Calendar 2027: Every Payday, Holidays Applied';
+const description = 'Payroll calendar 2027 generator: weekly, biweekly, semi-monthly or monthly paydays, moved off weekends and bank holidays, with an .ics file and a print list.';
+const faqs = [
+  { q: 'How do I make a payroll calendar for 2027?', a: 'Choose the pay frequency, give one payday you already know for a weekly or biweekly schedule, or the days of the month for semi-monthly and monthly pay, then pick what happens when a payday falls on a weekend or a holiday. The generator lists every payday of 2027, marks those that moved and exports them as an .ics file or a printable page.' },
+  { q: 'Which holidays move a payday?', a: 'For pay by direct deposit, the Federal Reserve holidays, because no ACH payment settles on them. They are the eleven legal public holidays, with a Sunday holiday closing the banks on Monday and a Saturday holiday closing nothing. Employers that follow the federal calendar also close on the Friday before a Saturday holiday; the generator offers both calendars.' },
+  { q: 'Will I get 27 paychecks in 2027?', a: `Only on a biweekly Friday schedule whose first payday is ${h.date(s1.first)}. That date is New Year’s Day, so most payrolls pay it on ${h.date('2026-12-31')}, which leaves 26 paydays in 2027. If your employer pays the next business day instead, you get 27. The other Friday series and every other weekday have 26.` },
+  { q: 'What is the difference between a pay period and a payday?', a: 'The pay period is the span of work being paid, often a week or two weeks; the payday is when that pay reaches you, usually a few days after the period ends so that hours can be collected and checked. The generator shows both for weekly and biweekly schedules, with a delay you can set.' },
+  { q: 'Does this site know my employer’s pay dates?', a: 'No. It computes dates from the schedule and the rule you enter, using the holiday law and the bank calendar. Your employer’s payroll office sets the actual payday, and can pay earlier for its own reasons. If a date here differs from your pay stub, the stub is right and the setting to change is usually the holiday rule.' },
+  { q: 'Are federal paydays on this site?', a: 'The federal pay periods are, from the OPM leave year dates: every two-week period from Sunday to Saturday, numbered within the leave year. Federal paydays are not, because each payroll provider sets and publishes its own. The federal pages show which period a date falls in and the use-or-lose deadline for annual leave.' },
+  { q: 'Is anything I type stored?', a: 'No. The calendar, the calculators and the countdown run in your browser. The .ics file and the printable page are built on your device. Nothing you enter, no salary, no date, is sent to a server, and the site sets no cookie and asks for no account or email address.' },
+];
+const jsonLd = [websiteSchema(lang), organizationSchema(lang), webApplicationSchema({ name: 'Payroll calendar generator 2027', description, path: route('home', lang), lang }), faqSchema(faqs, lang)];
+const resume = `A payroll calendar for 2027 starts from one fact about the year: it begins on a ${h.wd('2027-01-01')} and ends on a ${h.wd('2027-12-31')}, so it holds ${h.cal.weekdayCounts(2027)[5]} Fridays. A biweekly Friday payroll is on one of two series. The series that starts on ${h.md(s1.first)} has ${s1.count} scheduled paydays, but the first one is New Year’s Day, when banks are closed; paid the business day before, as most payrolls do, it lands on ${h.day('2026-12-31')}, and 2027 keeps ${count(A, 2027)} paydays. The series that starts on ${h.md(s2.first)} has ${count(B, 2027)}. Semi-monthly pay on the 15th and the last day gives 24 paydays, ${h.moved(SEMI, 2027).length} of them moved off a weekend or Memorial Day; monthly pay gives 12. Two federal holidays fall on Saturdays in 2027, Juneteenth and Christmas, so federal offices close on the Fridays before while the Federal Reserve Banks stay open and deposits settle. The generator applies those rules to your own schedule and exports the dates.`;
+---
+<PageLayout title={title} description={description} lang={lang} jsonLd={jsonLd} faqs={faqs} breadcrumbs={[]}>
+  <header class="mb-3">
+    <h1 class="mt-0 text-[1.75rem] font-bold text-navy-900 max-sm:leading-tight sm:text-3xl md:text-4xl">Payroll calendar 2027: every payday of your schedule</h1>
+    <p class="mt-2 text-base text-navy-700 sm:text-lg">Weekly, biweekly, semi-monthly or monthly: the paydays of the year, moved off weekends and bank holidays, ready to download.</p>
+  </header>
+  <div data-outil class="mb-4"><Tool tool={{ kind: 'payroll', props: { year: 2027, anchor: s2.first } }} primary={true} seedKey="home" /></div>
+  <Clamp text={resume} id="clamp-home" lang={lang} class="mb-3" />
+  <p class="mb-8 text-sm text-navy-600">Last updated <time datetime={LAST_UPDATED}>{displayDate(LAST_UPDATED, 'en-US')}</time> · {AUTHOR_NAME} · <a href={route('method', lang)} class="underline hover:text-navy-900">How every date is computed</a> · <a href={route('about', lang)} class="underline hover:text-navy-900">About this site</a></p>
+
+  <div class="prose prose-slate max-w-none">
+    <h2>Four pay frequencies, four different years</h2>
+    <p>Most American employers pay on one of four schedules. Weekly and biweekly payrolls step through the calendar seven or fourteen days at a time, always on the same weekday. Semi-monthly and monthly payrolls pay on fixed days of the month and let the weekday wander. Which schedule an employer may use is a matter for state law, which in many states sets a minimum frequency; federal law asks only that wages be paid on a regular payday. The schedule you are on decides how many paychecks the year brings and how often a payday collides with a weekend or a holiday.</p>
+    <Fragment set:html={h.table(['Schedule', '2026', '2027', '2028'], [
+      ['Weekly, Fridays', String(count(WK, 2026)), String(count(WK, 2027)), String(count(WK, 2028))],
+      [`Biweekly, Fridays from ${h.md(s1.first)}`, String(count(A, 2026)), String(count(A, 2027)), String(count(A, 2028))],
+      [`Biweekly, Fridays from ${h.md(s2.first)}`, String(count(B, 2026)), String(count(B, 2027)), String(count(B, 2028))],
+      ['Semi-monthly, 15th and last day', String(count(SEMI, 2026)), String(count(SEMI, 2027)), String(count(SEMI, 2028))],
+      ['Monthly, last day', String(count(MON, 2026)), String(count(MON, 2027)), String(count(MON, 2028))],
+    ], `Paydays counted by the date paid, moved to the business day before a ${h.src('frbHolidays', 'Federal Reserve holiday')} or a weekend.`, ['l', 'r', 'r', 'r'])} />
+    <p set:html={`The table shows the effect of New Year’s Day. Both Friday schedules that meet ${h.day('2027-01-01')} pay it on ${h.dayNoYear('2026-12-31')}, which gives 2026 one payday more and 2027 one less. That is the whole story of “27 pay periods” in a sentence: the calendar sets the dates, the holiday rule decides which year they fall in. The ${link('how-many-pay-periods-in-2027', 'pay periods 2027 page')} counts every weekday, and the ${link('27-pay-periods', '27 pay periods page')} lists the coming years with an extra check.`} />
+
+    <h2>The weekend and holiday rule</h2>
+    <p set:html={`When a payday lands on a day the banks are closed, the payroll pays before or after. Nothing in federal law chooses for the employer: ${h.src('usc6103', '5 U.S.C. 6103')} names the holidays, the ${h.src('frbHolidays', 'Federal Reserve Banks')} decide on which weekdays payments settle, and the employer writes its own rule, almost always the business day before. The generator applies that rule by default. Switch it to the next business day, or to no move at all for a paper-check payroll, and the dates follow.`} />
+    <Fragment set:html={h.holidayTable(2027, `Holidays of 2027: the date in law, the federal day off from ${h.src('opmHolidays', 'OPM')} and the days the Federal Reserve Banks close.`)} />
+    <p>Three lines need a second look. Juneteenth and Christmas fall on Saturdays, so federal employees are off on the Fridays before while the banks stay open. Independence Day falls on a Sunday, so everyone takes Monday. And New Year’s Day 2028, a Saturday too, gives federal employees Friday, December 31, 2027, a day the banks are open. The mini tool below takes any holiday from 2026 to 2030 and gives the date a payday due on it is paid.</p>
+  </div>
+  <div class="mb-6"><Tool tool={{ kind: 'mini:holidaypay', props: { y: 2027, h: 5 } }} idPrefix="h1" /></div>
+  <div class="prose prose-slate max-w-none">
+    <p set:html={`Bank holidays are the ones that matter for direct deposit, which is how most employees are paid. The ${link('direct-deposit-holidays', 'direct deposit holidays page')} explains how a payroll file travels through the ACH network and why holiday weeks bring earlier cut-offs, and the ${link('business-days-calculator', 'business days calculator')} counts any deadline on the bank calendar.`} />
+
+    <h2>26 or 27 paydays, and what it does to a salary</h2>
+    <p set:html={`A biweekly year is 364 days, one or two short of the calendar. The schedule slides back a day or two each year until a payday falls on January 1, or January 2 in a leap year, and that year has 27 scheduled paydays. For Friday payrolls this happens in ${h.pay.years27(2026, 2045, 5).map((x) => x.year).join(', ')}, each time for one series of the two. The counter below gives both series for any weekday and year.`} />
+  </div>
+  <div class="mb-6"><Tool tool={{ kind: 'mini:payperiods', props: { y: 2027, w: 5 } }} idPrefix="h2" /></div>
+  <div class="prose prose-slate max-w-none">
+    <p set:html={`For hourly employees, a 27th payday pays two more weeks of work and changes nothing else. For salaried employees, it depends on the employer. Dividing the salary by 26 every year gives a year with one check more; dividing by 27 that year shrinks every check and keeps the total. Neither changes the pay for the work, but both change budgets, withholding and the yearly limits of benefit deductions. The ${link('biweekly-pay-calculator', 'paycheck calculator')} shows both methods on any salary, and gives the same gross pay for weekly, semi-monthly and monthly schedules.`} />
+
+    <h2>Federal pay periods</h2>
+    <p set:html={`Federal employees are paid biweekly on a calendar of their own. Each pay period runs from a Sunday to the second Saturday after it, and periods are numbered within the leave year, which begins with the first full pay period of January. The ${h.src('opmLeaveYear', 'OPM leave year table')} sets leave year 2027 from ${h.day(h.ly(2027).start)} to ${h.day(h.ly(2027).end)}, ${h.ly(2027).count} periods, with annual leave above the carryover ceiling to be scheduled by ${h.day(h.ly(2027).useOrLose!)}. Pay itself is computed by ${h.src('usc5504', '5 U.S.C. 5504')}: the annual rate divided by 2,087 hours, rounded to the cent, times 80.`} />
+  </div>
+  <div class="mb-6"><Tool tool={{ kind: 'mini:leaveyear', props: { y: 2027 } }} idPrefix="h3" /></div>
+  <div class="prose prose-slate max-w-none">
+    <p set:html={`Federal paydays are set by each payroll provider, a few days after a period closes, and this site does not guess them. The ${link('federal-pay-calendar-2027', 'federal pay calendar 2027')} dates every period with the holidays inside it; the ${link('federal-pay-calendar-2026', '2026 calendar')} lists the periods left in the current leave year.`} />
+
+    <h2>Working days and business days</h2>
+    <p set:html={`Many payroll tasks are counted in business days: the cut-off for sending a payroll file, the deadline for a final paycheck, the days of a per-diem contract. Year 2027 has ${h.cal.workingDaysByMonth(2027, 'weekends').reduce((s, m) => s + m.working, 0)} weekdays. On the bank calendar ${fedDays(2027)} of them are business days; on the federal calendar ${federalDays(2027)} are working days, three fewer because of the Fridays before Saturday holidays. The mini tool below gives the count for any month from 2026 to 2030.`} />
+  </div>
+  <div class="mb-6"><Tool tool={{ kind: 'mini:workdays', props: { y: 2027, m: 0, c: 0 } }} idPrefix="h4" /></div>
+  <div class="prose prose-slate max-w-none">
+    <p set:html={`The ${link('working-days-in-2027', 'working days 2027 page')} gives the full month-by-month table, and the ${link('how-many-fridays-in-2027', 'Fridays in 2027 page')} explains the extra Friday that makes 2027 a year of 53 weekly paydays.`} />
+
+    <h2>Clock changes and the night shift</h2>
+    <p set:html={`Twice a year, an overnight shift does not last the hours on the schedule. Under ${h.src('usc260a', '15 U.S.C. 260a')}, clocks fall back at 2 a.m. on the first Sunday of November, ${h.day(h.dst.dstEnd(2026))} this year, and spring forward on the second Sunday of March, ${h.day(h.dst.dstStart(2027))} next. The ${h.src('dolDst', 'Department of Labor')} counts the hours actually worked: nine on the fall night for a shift that is eight on any other, seven in spring. The extra hour is paid and can become overtime.`} />
+  </div>
+  <div class="mb-6"><Tool tool={{ kind: 'mini:shiftnight', props: { h: 8, k: 1 } }} idPrefix="h5" /></div>
+  <div class="prose prose-slate max-w-none">
+    <p set:html={`The ${link('when-does-daylight-saving-time-end', 'fall back countdown')} runs live in your own time zone, the ${link('daylight-saving-time-2027', '2027 page')} gives next year’s dates and the status of the bill to end clock changes, and the ${link('daylight-saving-time-night-shift-pay', 'night shift page')} computes the week’s hours and pay.`} />
+
+    <h2>Reading the dates on your pay stub</h2>
+    <p>A pay stub usually shows three dates: the start and end of the pay period, and the pay date or check date. The pay period tells you which hours are paid; the pay date tells you when, and is the one that counts for the year’s wages. If you know a single pay date, you can rebuild your whole schedule: enter it in the generator as “one payday of the schedule”, set the delay between the end of the period and payday to match your stub, and every period and payday of the year follows. When a date on your stub differs from the generator, the most common reason is the holiday rule; the second is a payroll that pays earlier around year end for its own reasons.</p>
+    <p>For employers and payroll staff, the printable page and the .ics file are the quickest way to publish next year’s calendar to a team: download the file once and import it into a shared calendar, or print the list for the break room. Both are built in your browser from the dates on screen.</p>
+
+    <h2>Every page of the site</h2>
+  </div>
+  <div class="not-prose grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-sommaire>
+    {GROUPS_ORDER.map((g) => (
+      <section><h3 class="mb-2 text-lg font-semibold text-navy-900">{groupLabel(g)}</h3><ul class="space-y-2 text-sm">{cards(g).map((c) => <li><a href={c.href} class="font-medium text-accent-700 underline">{c.name}</a><span class="block text-navy-700">{c.text}</span></li>)}</ul></section>
+    ))}
+  </div>
+  <div class="prose prose-slate mt-8 max-w-none">
+    <h2>Why our data changes the answer</h2>
+    <p set:html={`A payroll calendar typed by hand is right until the first holiday it forgets. This site types no dates. It reads the holiday rules of ${h.src('usc6103', '5 U.S.C. 6103')}, the observance rules for federal employees published by ${h.src('opmHolidays', 'OPM')}, the closure rules of the ${h.src('frbHolidays', 'Federal Reserve Banks')}, the ${h.src('opmLeaveYear', 'OPM leave year dates')} and the clock change rule of ${h.src('usc260a', '15 U.S.C. 260a')}, stores the rules in one data file, and computes every date from them. Automated tests compare the result with the official tables for 2026, 2027 and 2028 before each publication.`} />
+    <p>Computing instead of copying gives answers a static list cannot. It distinguishes the bank calendar from the federal one, which differ three times in 2027. It counts paydays by the date they are paid, which is what a W-2 counts, and shows how one holiday move sends a check into the previous year. It gives the 2028 calendar today, and any year after, from the same rules. And it fits your schedule, not a generic one: your weekday, your days of the month, your employer’s rule.</p>
+
+    <h2>How this site works</h2>
+    <p>The tools run in your browser. Nothing you type, not a payday, not a salary, is sent or stored; the calendar file and the printable page are made on your device. The site sells nothing, collects no contact details and links to no payroll provider. The <a href={route('method', lang)}>method page</a> sets out each rule and test, and the sources below are those the rules were read on, on {h.date(h.P.retrieved_at)}.</p>
+    <Sources lang={lang} keys={['usc6103', 'opmHolidays', 'frbHolidays', 'opmLeaveYear', 'nfc2027', 'usc5504', 'usc260a', 'nistDst', 'dolDst', 'cfr778106']} />
+  </div>
+</PageLayout>

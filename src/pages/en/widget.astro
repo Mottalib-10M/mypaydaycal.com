@@ -1,0 +1,27 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { SITE_URL } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { breadcrumbSchema } from '../../lib/seo';
+import { t } from '../../i18n/ui';
+const lang = 'en';
+const code = `<iframe src="${SITE_URL}/embed/payroll-calendar/" title="Payroll calendar" width="100%" height="900" style="border:0;max-width:1100px" loading="lazy"></iframe>`;
+const code2 = `<iframe src="${SITE_URL}/embed/business-days-calculator/" title="Business days calculator" width="100%" height="560" style="border:0;max-width:1000px" loading="lazy"></iframe>`;
+const code3 = `<iframe src="${SITE_URL}/embed/dst-countdown/" title="Clock change countdown" width="100%" height="420" style="border:0;max-width:1000px" loading="lazy"></iframe>`;
+---
+<PageLayout title="Embed the free payroll calendar on your website or intranet" description="Put the payroll calendar generator, the business days calculator or the clock change countdown on your intranet, HR page or blog: one iframe, no sign-up, no cookie and no cost." lang={lang} noindex={true} jsonLd={[breadcrumbSchema([{ name: t(lang).breadcrumbHome, path: route('home', lang) }, { name: 'Embed', path: route('widget', lang) }])]} breadcrumbs={[{ label: 'Embed' }]} showAuthor={false}>
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold text-navy-900 md:text-4xl">Embed a payroll tool</h1>
+    <p class="mt-3 text-lg text-navy-700">For HR teams, intranets, payroll offices, libraries and blogs that help people plan around paydays.</p>
+  </header>
+  <div class="prose prose-slate max-w-none">
+    <h2>Payroll calendar generator</h2>
+    <pre class="overflow-x-auto rounded-lg bg-navy-900 p-4 text-sm text-white"><code>{code}</code></pre>
+    <h2>Business days calculator</h2>
+    <pre class="overflow-x-auto rounded-lg bg-navy-900 p-4 text-sm text-white"><code>{code2}</code></pre>
+    <h2>Clock change countdown</h2>
+    <pre class="overflow-x-auto rounded-lg bg-navy-900 p-4 text-sm text-white"><code>{code3}</code></pre>
+    <p>Conditions: keep the credit line under the frame visible and use the tool as it is, without warranty. When a holiday rule changes, the embedded tool updates itself. Nothing your visitors type reaches us and the frame sets no cookie and makes no outside request. Each frame states that the site is independent and not a payroll provider, a bank or a government agency. Questions: <a href={route('contact', lang)}>contact</a>.</p>
+  </div>
+  <div class="mt-8 overflow-hidden rounded-xl border border-navy-200"><iframe src="/embed/payroll-calendar/" title="Payroll calendar" width="100%" height="900" style="border:0" loading="lazy"></iframe></div>
+</PageLayout>

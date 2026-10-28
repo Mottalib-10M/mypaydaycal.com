@@ -1,0 +1,23 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import LegalIdentity from '../../components/LegalIdentity.astro';
+import { CONTACT_EMAIL, LAST_UPDATED, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { displayDate } from '../../lib/format';
+const lang = 'en';
+---
+<PageLayout title={`Contact ${SITE_NAMES[lang]}: a date, a source, the widget`} description="Write to US Payroll Calendar when a payday, a holiday or a clock change date looks wrong, when a page seems out of date, or to embed the payroll calendar on your own site." lang={lang} noindex={true} breadcrumbs={[{ label: 'Contact' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none">
+    <h1>Contact</h1>
+    <p>Email: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. A person reads every message.</p>
+    <h2>A date looks wrong</h2>
+    <p>Tell us the page, the date and, if you have it, the official table that says otherwise. We read the source again, correct the rule if needed, add a test for the case and date the change.</p>
+    <h2>What we cannot do</h2>
+    <p>We are not your employer, a payroll provider or a bank. We cannot tell you when your own pay will arrive, correct a pay stub or contact your payroll office. Please do not send pay stubs, salaries or personal details.</p>
+    <h2>Using a tool on your own site</h2>
+    <p>Payroll teams, intranets, libraries and blogs can show the payroll calendar, the business days calculator or the clock change countdown in an iframe at no cost: see the <a href={route('widget', lang)}>embed page</a>.</p>
+    <h2>Publisher</h2>
+    <LegalIdentity lang={lang} />
+    <p>Updated on <time datetime={LAST_UPDATED}>{displayDate(LAST_UPDATED, 'en-US')}</time>.</p>
+  </div>
+</PageLayout>

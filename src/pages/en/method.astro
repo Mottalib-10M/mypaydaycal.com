@@ -1,0 +1,43 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { LAST_UPDATED } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { breadcrumbSchema, articleSchema } from '../../lib/seo';
+import { helpers } from '../../lib/helpers';
+import { displayDate } from '../../lib/format';
+const lang = 'en';
+const h = helpers(lang);
+const s = (k: Parameters<typeof h.src>[0], t: string) => h.src(k, t);
+---
+<PageLayout title="Method of US Payroll Calendar: holidays, paydays and periods" description="How US Payroll Calendar computes holidays, bank days, paydays, pay periods, leave years and clock changes from the law, and tests each rule on official tables." lang={lang} jsonLd={[articleSchema({ title: 'How every payday, holiday and clock change is computed', description: 'Method of US Payroll Calendar', path: route('method', lang), lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'Method', path: route('method', lang) }])]} breadcrumbs={[{ label: 'Method' }]}>
+  <header class="mb-6"><p class="kicker">Method</p><h1 class="mt-0 text-3xl font-bold text-navy-900 md:text-4xl">How every payday, holiday and clock change is computed</h1></header>
+  <div class="prose prose-slate max-w-none">
+    <p>No date is typed into a page. The rules are stored once in a data file, read on the sources below on {h.date(h.P.retrieved_at)}, and a small engine computes every holiday, payday, period and clock change from them. Automated tests compare the engine with the official tables for 2026, 2027 and 2028 before each publication; a mismatch stops the build.</p>
+    <h2>1. Holidays</h2>
+    <p>The eleven legal public holidays of <Fragment set:html={s('usc6103', '5 U.S.C. 6103(a)')} /> are stored as rules: a fixed date (New Year’s Day, Juneteenth, Independence Day, Veterans Day, Christmas Day), the n-th weekday of a month (the third Monday of January and of February, the first Monday of September, the second Monday of October, the fourth Thursday of November) or the last Monday of May. Two observance rules follow:</p>
+    <ul>
+      <li><strong>Federal days off</strong>: a holiday on a Saturday is observed on the Friday before (5 U.S.C. 6103(b)), one on a Sunday on the Monday after (Executive Order 11582), as the <Fragment set:html={s('opmHolidays', 'OPM holiday tables')} /> show. A Saturday New Year’s Day is therefore observed on December 31 of the previous year.</li>
+      <li><strong>Bank days</strong>: the <Fragment set:html={s('frbHolidays', 'Federal Reserve Banks')} /> close on the Monday after a Sunday holiday and stay open on the Friday before a Saturday holiday.</li>
+    </ul>
+    <p>Inauguration Day, a holiday for federal employees in the Washington area every four years, and state or local holidays are not included.</p>
+    <h2>2. Paydays</h2>
+    <p>A weekly or biweekly schedule is a series of dates 7 or 14 days apart, through any payday you give. A semi-monthly schedule pays on two days of each month and a monthly schedule on one, with “last day” following the length of each month. Each date that is a Saturday, a Sunday or a closed day of the chosen calendar is moved to the business day before, the business day after, or not moved, as you choose; no federal law sets that rule, and the overtime regulation at <Fragment set:html={s('cfr778106', '29 CFR 778.106')} /> only asks for payment on the regular payday. Paydays are counted in the year in which they are paid. For weekly and biweekly schedules, the pay period shown ends the number of days before payday you set (six by default, a Sunday to Saturday period paid the next Friday).</p>
+    <h2>3. Years with 27 paydays</h2>
+    <p>A biweekly series has 27 dates in a year when its first date is January 1, or January 2 in a leap year. The engine finds these years by stepping through the calendar, and the tests check, for example, that the Friday series of {h.date('2027-01-01')} has 27 dates and that it pays 26 times in 2027 when its first payday is moved to {h.date('2026-12-31')}.</p>
+    <h2>4. Pay amounts</h2>
+    <p>Gross pay per paycheck is the annual salary divided by 52, 26, 24 or 12, or the hourly rate times the hours of the period; semi-monthly and monthly hourly figures use 52 weeks a year, the conversion of <Fragment set:html={s('cfr778113', '29 CFR 778.113')} />. Federal biweekly pay follows <Fragment set:html={s('usc5504', '5 U.S.C. 5504')} />: annual rate divided by 2,087, rounded to the nearest cent, times 80. No tax or deduction is computed.</p>
+    <h2>5. Federal pay periods</h2>
+    <p>Leave years start on the dates of the <Fragment set:html={s('opmLeaveYear', 'OPM leave year fact sheet')} />, 2023 to 2031, with the use-or-lose dates of the same table. Each leave year is cut into two-week periods from its start; their number is 26, or 27 when 378 days separate two starts, as in 2023 (<Fragment set:html={s('opm27', 'OPM memorandum CPM 2023-11')} />). The tests check pay period 1 of 2027 against the <Fragment set:html={s('nfc2027', 'National Finance Center calendar')} />. Federal paydays are not computed: each provider sets them.</p>
+    <h2>6. Clock changes and hours worked</h2>
+    <p>Daylight saving time runs from 2 a.m. on the second Sunday of March to 2 a.m. on the first Sunday of November (<Fragment set:html={s('usc260a', '15 U.S.C. 260a')} />, checked with <Fragment set:html={s('nistDst', 'NIST')} />). The countdown uses your device’s clock and time zone; it compares the offset of January and July to tell whether your zone changes. On a change night, a shift on duty at 2 a.m. gains one hour in fall and loses one in spring, the example of the <Fragment set:html={s('dolDst', 'Department of Labor’s Hours Worked Advisor')} />; overtime is counted over 40 hours per workweek, <Fragment set:html={s('cfr778104', 'each workweek standing alone')} />. Bills to end clock changes are followed through the <Fragment set:html={s('hr139', 'House roll calls')} /> and the congressional record.</p>
+    <h2>7. Business days</h2>
+    <p>A business day is a weekday that is not a closed day of the chosen calendar. By default the count starts the day after the start date and includes the end date; a box includes the start date too.</p>
+    <h2>8. What the site does not do</h2>
+    <ul>
+      <li>It does not know your employer’s payroll: its dates follow the schedule and rule you enter.</li>
+      <li>It does not compute taxes, deductions or net pay.</li>
+      <li>It does not keep anything you type: the tools, the .ics file and the printable list are made in your browser.</li>
+    </ul>
+    <p>Method version of <time datetime={LAST_UPDATED}>{displayDate(LAST_UPDATED, 'en-US')}</time>. A date that looks wrong: <a href={route('contact', lang)}>contact</a>.</p>
+  </div>
+</PageLayout>

@@ -1,0 +1,26 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { AUTHOR_NAME, CONTACT_EMAIL, LAST_UPDATED, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { displayDate } from '../../lib/format';
+const lang = 'en';
+---
+<PageLayout title={`Editorial policy of ${SITE_NAMES[lang]}: sources and corrections`} description="Which laws and official tables US Payroll Calendar relies on, how computed dates are tested against them, which sources it refuses and how a mistake is corrected and dated." lang={lang} noindex={true} breadcrumbs={[{ label: 'Editorial policy' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none">
+    <h1>Editorial and corrections policy</h1>
+    <p>People use these pages to plan rent, bills and leave around their paydays, and payroll staff use them to publish a calendar. A wrong holiday or a wrong count can make a payment late, so every rule points back to the text it was read in, and every date is computed from those rules.</p>
+    <h2>Who is responsible</h2><p>{AUTHOR_NAME}, reachable at <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+    <h2>What we read</h2>
+    <ul>
+      <li>the United States Code on govinfo.gov: 5 U.S.C. 6103 (holidays), 5 U.S.C. 5504 (federal pay periods and pay), 15 U.S.C. 260a (daylight saving time);</li>
+      <li>the Code of Federal Regulations on ecfr.gov, Title 29, Part 778 (workweek, payday for overtime, salary conversions);</li>
+      <li>opm.gov: federal holiday tables and the leave year fact sheet; frbservices.org: Federal Reserve holiday schedules; the National Finance Center’s pay period calendars;</li>
+      <li>the Department of Labor’s Hours Worked Advisor, NIST’s daylight saving time page, and the House Clerk’s roll calls for bills that would change the clocks.</li>
+    </ul>
+    <h2>Sources we refuse</h2><p>Payroll software vendors, pay stub sellers, forums and undated lists never supply a date or a rule here. Where official sources are silent, as for the paydays of each federal payroll provider, the page says so instead of guessing.</p>
+    <h2>Review cycle</h2><p>The holiday and leave year tables are read again every year when OPM and the Federal Reserve publish the next years, and whenever Congress changes a holiday or the clock change rule. The tests compare the computed dates with those tables before each publication.</p>
+    <h2>Corrections</h2>
+    <ol><li>We open the source again.</li><li>We correct the rule in the data file and add an automated test for the case.</li><li>The site rebuilds and every page shows the new date.</li></ol>
+    <h2>Independence</h2><p>No employer, bank, payroll provider or agency pays for or reviews what is published here, and the site carries no affiliate link. See also the <a href={route('method', lang)}>method page</a>. Version of <time datetime={LAST_UPDATED}>{displayDate(LAST_UPDATED, 'en-US')}</time>.</p>
+  </div>
+</PageLayout>

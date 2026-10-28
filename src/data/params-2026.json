@@ -1,0 +1,72 @@
+{
+  "_lisezmoi": "Every rule and date the site applies lives here, read on the official source cited, never typed into a page (RECETTE §4). Holiday dates are not stored: the engine computes them from the rules below and tests compare them with the OPM and Federal Reserve tables.",
+  "year": 2026,
+  "retrieved_at": "2026-10-28",
+  "valid_from": "2026-01-01",
+  "valid_to": "2028-12-31",
+  "holidays": {
+    "_source": "5 U.S.C. 6103(a), read on govinfo.gov on 2026-10-28; observance: 5 U.S.C. 6103(b) (Saturday to Friday) and Executive Order 11582 sec. 3(a) (Sunday to Monday), as stated on the OPM federal holidays page read the same day.",
+    "list": [
+      { "key": "newYear", "name": "New Year’s Day", "rule": "fixed", "month": 1, "day": 1 },
+      { "key": "mlk", "name": "Birthday of Martin Luther King, Jr.", "rule": "nth", "month": 1, "weekday": 1, "n": 3 },
+      { "key": "washington", "name": "Washington’s Birthday", "rule": "nth", "month": 2, "weekday": 1, "n": 3 },
+      { "key": "memorial", "name": "Memorial Day", "rule": "last", "month": 5, "weekday": 1 },
+      { "key": "juneteenth", "name": "Juneteenth National Independence Day", "rule": "fixed", "month": 6, "day": 19 },
+      { "key": "independence", "name": "Independence Day", "rule": "fixed", "month": 7, "day": 4 },
+      { "key": "labor", "name": "Labor Day", "rule": "nth", "month": 9, "weekday": 1, "n": 1 },
+      { "key": "columbus", "name": "Columbus Day", "rule": "nth", "month": 10, "weekday": 1, "n": 2 },
+      { "key": "veterans", "name": "Veterans Day", "rule": "fixed", "month": 11, "day": 11 },
+      { "key": "thanksgiving", "name": "Thanksgiving Day", "rule": "nth", "month": 11, "weekday": 4, "n": 4 },
+      { "key": "christmas", "name": "Christmas Day", "rule": "fixed", "month": 12, "day": 25 }
+    ]
+  },
+  "fed": {
+    "_source": "Federal Reserve Financial Services, Holiday Schedules (FedCash schedule 2026 to 2030 and FedACH holiday schedule 2026), read on frbservices.org on 2026-10-28.",
+    "saturdayRule": "For holidays falling on Saturday, Federal Reserve Banks and Branches will be open the preceding Friday.",
+    "sundayRule": "For holidays falling on Sunday, Federal Reserve Banks and Branches will be closed the following Monday."
+  },
+  "leaveYears": {
+    "_source": "OPM fact sheet Leave Year Beginning and Ending Dates, read on opm.gov on 2026-10-28. A leave year begins on the first day of the first full biweekly pay period in a calendar year (5 CFR 630.201).",
+    "starts": { "2023": "2023-01-01", "2024": "2024-01-14", "2025": "2025-01-12", "2026": "2026-01-11", "2027": "2027-01-10", "2028": "2028-01-09", "2029": "2029-01-07", "2030": "2030-01-06", "2031": "2031-01-05" },
+    "useOrLose": { "2026": "2026-11-28", "2027": "2027-11-27", "2028": "2028-11-25", "2029": "2029-11-24", "2030": "2030-11-23" },
+    "_note2031": "2031-01-05 is the day after the 2030 leave year ends on 2031-01-04 in the same OPM table."
+  },
+  "federalPay": {
+    "_source": "5 U.S.C. 5504: the pay period covers two administrative workweeks; hourly rate = annual rate / 2,087, rounded to the nearest cent; biweekly rate = hourly rate x 80. Read on govinfo.gov on 2026-10-28.",
+    "hoursDivisor": 2087,
+    "biweeklyHours": 80,
+    "carryoverHours": 240,
+    "memo27": "OPM CPM 2023-11 (June 26, 2023): leave year 2023 had 27 pay periods for most employees, but most employees still had 26 paydays in calendar year 2023; leave accrual follows pay periods, not paydays."
+  },
+  "dst": {
+    "_source": "15 U.S.C. 260a(a): daylight saving time runs from 2 a.m. on the second Sunday of March to 2 a.m. on the first Sunday of November (as amended by Pub. L. 109-58, effective 2007). Read on govinfo.gov on 2026-10-28; NIST page read the same day.",
+    "startMonth": 3, "startWeekday": 0, "startN": 2,
+    "endMonth": 11, "endWeekday": 0, "endN": 1,
+    "hour": 2,
+    "notObserved": ["Hawaii", "Arizona (except the Navajo Nation)", "American Samoa", "Guam", "Puerto Rico", "the U.S. Virgin Islands"],
+    "bill": { "number": "H.R. 139", "name": "Sunshine Protection Act", "housePassed": "2026-07-14", "houseVote": "308-117", "senateReferred": "2026-07-15", "status": "Referred to the Senate Committee on Commerce, Science, and Transportation; not law as of 2026-10-28" }
+  },
+  "flsa": {
+    "_source": "29 CFR 778.104, 778.105, 778.106 and 778.113 read on ecfr.gov on 2026-10-28; DOL FLSA Hours Worked Advisor, Daylight Savings Time screen, read on webapps.dol.gov the same day.",
+    "overtimeAfter": 40,
+    "overtimeRate": 1.5,
+    "workweekHours": 168
+  },
+  "sources": {
+    "usc6103": { "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title5/html/USCODE-2023-title5-partIII-subpartE-chap61-subchapI-sec6103.htm", "label": { "en": "5 U.S.C. 6103, Holidays (United States Code on govinfo.gov)" } },
+    "opmHolidays": { "url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/", "label": { "en": "OPM: Federal Holidays, schedules 2024 to 2028" } },
+    "frbHolidays": { "url": "https://www.frbservices.org/about/holiday-schedules", "label": { "en": "Federal Reserve Financial Services: Holiday Schedules, FedCash 2026 to 2030 and FedACH 2026" } },
+    "opmLeaveYear": { "url": "https://www.opm.gov/policy-data-oversight/pay-leave/leave-administration/fact-sheets/leave-year-beginning-and-ending-dates/", "label": { "en": "OPM fact sheet: Leave Year Beginning and Ending Dates (2012 to 2030)" } },
+    "opm27": { "url": "https://www.opm.gov/chcoc/transmittals/2023/27%20pay%20periods%20in%20leave%20year%202023_0.pdf", "label": { "en": "OPM memorandum CPM 2023-11: 27 Pay Periods in Leave Year 2023 (PDF)" } },
+    "nfc2027": { "url": "https://www.nfc.usda.gov/Publications/Forms/1217n_27.pdf", "label": { "en": "USDA National Finance Center: Pay Period Calendar 2027, Form NFC-1217 (PDF)" } },
+    "nfc2026": { "url": "https://www.nfc.usda.gov/Publications/Forms/1217n_26.pdf", "label": { "en": "USDA National Finance Center: Pay Period Calendar 2026, Form NFC-1217 (PDF)" } },
+    "usc5504": { "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title5/html/USCODE-2023-title5-partIII-subpartD-chap55-subchapI-sec5504.htm", "label": { "en": "5 U.S.C. 5504, Biweekly pay periods; computation of pay" } },
+    "usc260a": { "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap6-subchapIX-sec260a.htm", "label": { "en": "15 U.S.C. 260a, Advancement of time or changeover dates" } },
+    "nistDst": { "url": "https://www.nist.gov/pml/time-and-frequency-division/popular-links/daylight-saving-time-dst", "label": { "en": "NIST Time and Frequency Division: Daylight Saving Time rules" } },
+    "hr139": { "url": "https://clerk.house.gov/Votes/2026238", "label": { "en": "Clerk of the House: Roll Call 238, H.R. 139 Sunshine Protection Act, July 14, 2026" } },
+    "dolDst": { "url": "https://webapps.dol.gov/elaws/whd/flsa/hoursworked/screenEr11.asp", "label": { "en": "U.S. Department of Labor, FLSA Hours Worked Advisor: Daylight Savings Time" } },
+    "cfr778106": { "url": "https://www.ecfr.gov/current/title-29/section-778.106", "label": { "en": "29 CFR 778.106, Time of payment (overtime on the regular payday)" } },
+    "cfr778104": { "url": "https://www.ecfr.gov/current/title-29/section-778.104", "label": { "en": "29 CFR 778.104, Each workweek stands alone" } },
+    "cfr778113": { "url": "https://www.ecfr.gov/current/title-29/section-778.113", "label": { "en": "29 CFR 778.113, Salaried employees: weekly equivalent of a monthly or semimonthly salary" } }
+  }
+}

@@ -1,0 +1,34 @@
+---
+/**
+ * Renders one tool with its page defaults: `payroll` (props: freq, year, anchor, d1, d2, day, rule, cal),
+ * `bizdays` (props: start, end, n, mode, cal), `dst` (props: year, focus), `shift` (props: kind, year),
+ * `paycheck` (props: mode, freq), `fedpp` (props: year, date) or `mini:<spec>` from `lib/mini-specs.ts`.
+ */
+import PayrollCalendar from './calc/PayrollCalendar';
+import BusinessDays from './calc/BusinessDays';
+import DstCountdown from './calc/DstCountdown';
+import ShiftHours from './calc/ShiftHours';
+import PaycheckCalc from './calc/PaycheckCalc';
+import FederalPeriods from './calc/FederalPeriods';
+import MiniSim from './calc/MiniSim';
+import { route, hasRoute, type Locale } from '../i18n/routes';
+import { getSpec } from '../lib/mini-specs';
+import type { ToolDef } from '../lib/guide-types';
+interface Props { tool: ToolDef; lang?: Locale; primary?: boolean; idPrefix?: string; seedKey?: string }
+const { tool, lang = 'en', primary = false, idPrefix } = Astro.props;
+const props = (tool.props ?? {}) as Record<string, any>;
+const kind = tool.kind;
+const mini = kind.startsWith('mini:') ? kind.slice(5) : null;
+const spec = mini ? getSpec(mini) : null;
+const href = spec?.ctaPage && hasRoute(spec.ctaPage, lang) ? route(spec.ctaPage, lang) : undefined;
+const numDefaults: Record<string, number> = {};
+for (const [k, v] of Object.entries(props)) if (typeof v === 'number') numDefaults[k] = v;
+const id = (p: string) => idPrefix ?? (primary ? p : `${p}2`);
+---
+{kind === 'payroll' && <PayrollCalendar client:load idPrefix={id('pc')} primary={primary} {...props} />}
+{kind === 'bizdays' && <BusinessDays client:load idPrefix={id('bd')} primary={primary} {...props} />}
+{kind === 'dst' && <DstCountdown client:load idPrefix={id('dst')} primary={primary} {...props} />}
+{kind === 'shift' && <ShiftHours client:load idPrefix={id('sh')} primary={primary} {...props} />}
+{kind === 'paycheck' && <PaycheckCalc client:load idPrefix={id('pk')} primary={primary} {...props} />}
+{kind === 'fedpp' && <FederalPeriods client:load idPrefix={id('fp')} primary={primary} {...props} />}
+{mini && <MiniSim client:load kind={mini} href={href} defaults={numDefaults} primary={primary} idPrefix={idPrefix ?? (primary ? 'p' : 'm')} />}

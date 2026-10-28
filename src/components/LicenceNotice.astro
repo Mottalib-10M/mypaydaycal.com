@@ -1,0 +1,8 @@
+---
+/** Status of the texts the site relies on (RECETTE §12.1). Shown at the foot of every page, embeds included. */
+interface Props { class?: string }
+const { class: cls = 'text-xs text-navy-500' } = Astro.props;
+---
+<p class={cls} data-licence-notice>
+  Holiday rules, pay period dates and clock change rules: United States Code, Code of Federal Regulations, OPM, Department of Labor, NIST and Federal Reserve publications, read on their official pages and not reproduced. Dates computed and explanations written by Radif Partners.
+</p>
